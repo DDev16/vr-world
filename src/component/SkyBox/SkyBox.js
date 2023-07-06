@@ -14,7 +14,7 @@ const SkyBox = ({ textureUrl }) => {
 
   return (
     <mesh>
-      <sphereGeometry attach="geometry" args={[150, 10, 10]} />
+      <sphereGeometry attach="geometry" args={[30, 10, 20]} />
       <meshBasicMaterial attach="material" {...materialProps} />
     </mesh>
   );

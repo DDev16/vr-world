@@ -39,7 +39,7 @@ export const Player = () => {
   useFrame((_, delta) => {
     const cameraOffset = new THREE.Vector3(0, 1, -8);
     const modelPosition = model.current.position.clone();
-    modelPosition.y += 2; 
+    modelPosition.y += 2; // Adjust the height of the camera above the model
     camera.position.lerp(modelPosition.add(cameraOffset), 0.1);
     camera.lookAt(model.current.position);
 
@@ -77,35 +77,27 @@ export const Player = () => {
     const cameraDirectionXZ = new THREE.Vector3(cameraDirection.x, 0, cameraDirection.z).normalize();
     const cameraPerpendicular = new THREE.Vector3(cameraDirection.z, 0, -cameraDirection.x).normalize();
 
-    if (forwardPress && rightPress) {
-      const newPos = model.current.position.clone().addScaledVector(cameraDirectionXZ.add(cameraPerpendicular), -speed);
-      model.current.lookAt(newPos);
-      model.current.position.addScaledVector(cameraDirectionXZ.add(cameraPerpendicular), -speed);
-    } else if (forwardPress && leftPress) {
-      const newPos = model.current.position.clone().addScaledVector(cameraDirectionXZ.sub(cameraPerpendicular), -speed);
-      model.current.lookAt(newPos);
-      model.current.position.addScaledVector(cameraDirectionXZ.sub(cameraPerpendicular), -speed);
-    } else if (forwardPress) {
-      const newPos = model.current.position.clone().addScaledVector(cameraDirectionXZ, speed);
-      model.current.lookAt(newPos);
-      model.current.position.addScaledVector(cameraDirectionXZ, speed);
-    } 
-    if (backwardPress) {
-      const newPos = model.current.position.clone().addScaledVector(cameraDirectionXZ, -speed);
-      model.current.lookAt(newPos);
-      model.current.position.addScaledVector(cameraDirectionXZ, -speed);
-    }
-    if (leftPress && !forwardPress) {
-      const newPos = model.current.position.clone().addScaledVector(cameraPerpendicular, speed);
-      model.current.lookAt(newPos);
-      model.current.position.addScaledVector(cameraPerpendicular, speed);
-    }
-    if (rightPress && !forwardPress) {
-      const newPos = model.current.position.clone().addScaledVector(cameraPerpendicular, -speed);
-      model.current.lookAt(newPos);
-      model.current.position.addScaledVector(cameraPerpendicular, -speed);
-    }
-    
+    if (forwardPress) {
+        const newPos = model.current.position.clone().addScaledVector(cameraDirectionXZ, speed);
+        model.current.lookAt(newPos);
+        model.current.position.addScaledVector(cameraDirectionXZ, speed);
+      }
+      if (backwardPress) {
+        const newPos = model.current.position.clone().addScaledVector(cameraDirectionXZ, -speed);
+        model.current.lookAt(newPos);
+        model.current.position.addScaledVector(cameraDirectionXZ, -speed);
+      }
+      if (leftPress) {
+        const newPos = model.current.position.clone().addScaledVector(cameraPerpendicular, speed);
+        model.current.lookAt(newPos);
+        model.current.position.addScaledVector(cameraPerpendicular, speed);
+      }
+      if (rightPress) {
+        const newPos = model.current.position.clone().addScaledVector(cameraPerpendicular, -speed);
+        model.current.lookAt(newPos);
+        model.current.position.addScaledVector(cameraPerpendicular, -speed);
+      }
+      
     model.current.position.y -= gravity;
     if (model.current.position.y <= groundY) {
       model.current.position.y = groundY;

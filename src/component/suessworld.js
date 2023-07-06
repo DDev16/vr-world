@@ -6,7 +6,7 @@ import { Player } from './player';
 import SkyBox from '../component/SkyBox/SkyBox.js';
 import SkyBox1 from '../component/SkyBox/SkyBox1.js';
 import Sky1 from '../component/SkyBox/stars.jpg'
-
+import { Vortex } from './3D-models/Vortex';
 import Sky from '../component/SkyBox/cartoon_step_into_a_dr_seuss-inspired_skybox_tri.jpg'
 
 const XRSetup = () => {
@@ -58,23 +58,22 @@ const SeussWorld = () => {
         {testing ? <Stats /> : null}
         {testing ? <axesHelper args={[2]} /> : null}
         {testing ? <gridHelper args={[500, 500]} /> : null}
-          <ambientLight intensity={0.5} />
+          <ambientLight intensity={5} />
           <pointLight position={[10, 10, 10]} />
 
-          {/* This Box component could represent a simple building or object in the Seuss world */}
+          {/* This Box component could represent a simple building or object in the Seuss world
           <Box position={[-1.2, 2, 0]} scale={[2,5,2]}>
             <meshStandardMaterial color={'orange'} />
-          </Box>
+          </Box> */}
 
           {/* This Plane represents the ground
           <Plane args={[500, 500]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
             <meshStandardMaterial color={'green'} />
           </Plane> */}
 
-          {/* The Sky can give a more immersive experience */}
-          <SkyBox textureUrl={Sky} /> 
+         <SkyBox textureUrl={Sky} />  
           <SkyBox1 textureUrl={Sky1} /> 
-
+          <Vortex />
 
           {/* OrbitControls allows the user to look around using the mouse */}
           <OrbitControls enablePan={false} enableZoom={true} enabled={orbitEnabled} />
