@@ -1,8 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useThree } from '@react-three/fiber';
-import * as THREE from 'three';
-const { PointLight, PlaneBufferGeometry, MeshStandardMaterial, TextureLoader } = THREE;
-
+import { PointLight, PlaneGeometry, MeshStandardMaterial, TextureLoader } from 'three';
+import * as THREE from "three"
 export function Vortex() {
   const mesh = useRef();
   const { scene, camera, gl: renderer } = useThree();
@@ -18,12 +17,12 @@ export function Vortex() {
     let loader = new TextureLoader();
 
     loader.load("/component/3D-models/smoke.JPG", function (texture){
-      portalGeo = new PlaneBufferGeometry(350,350);
+      portalGeo = new PlaneGeometry(350,350);
       portalMaterial = new MeshStandardMaterial({
         map:texture,
         transparent: true
       });
-      smokeGeo = new PlaneBufferGeometry(1000,1000);
+      smokeGeo = new PlaneGeometry(1000,1000);
       smokeMaterial = new MeshStandardMaterial({
         map:texture,
         transparent: true
