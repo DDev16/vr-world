@@ -6,7 +6,6 @@ import { Player } from './player';
 import SkyBox from '../component/SkyBox/SkyBox.js';
 import SkyBox1 from '../component/SkyBox/SkyBox1.js';
 import Sky1 from '../component/SkyBox/stars.jpg'
-import { Vortex } from './3D-models/Vortex';
 import Sky from '../component/SkyBox/cartoon_step_into_a_dr_seuss-inspired_skybox_tri.jpg'
 
 const XRSetup = () => {
@@ -71,7 +70,7 @@ const SeussWorld = () => {
     
            <SkyBox textureUrl={Sky} />  
             <SkyBox1 textureUrl={Sky1} /> 
-            <Vortex />
+            
     
             {/* OrbitControls allows the user to look around using the mouse */}
             <OrbitControls enablePan={false} enableZoom={true} enabled={orbitEnabled} />
@@ -81,7 +80,7 @@ const SeussWorld = () => {
           </XR>
         </Canvas>
       </div>
-      
+
     );
 }
 
