@@ -40,7 +40,6 @@ const FrontPage = () => {
   }, [windowWidth]);
 
   const checkNFTOwnership = async () => {
-    console.log('checkNFTOwnership function called');
   
     try {
       const web3 = new Web3(window.ethereum);
@@ -56,28 +55,23 @@ const FrontPage = () => {
       const userAddress = accounts[0];
   
       const balance = await nftContract.methods.balanceOf(userAddress).call();
-      console.log('balance:', balance.toString());
-  
-      setIsAllowed(balance.toString() > '0');
+
+setIsAllowed(Number(balance.toString()) > 0);
+
     } catch (error) {
-      console.error('Error checking NFT ownership:', error);
     }
   };
   
 
   useEffect(() => {
     if (window.ethereum) {
-      console.log('MetaMask is installed');
       window.web3 = new Web3(window.ethereum);
       requestAccount();
     } else {
-      console.log('MetaMask is not detected');
     }
   }, []);
 
   const requestAccount = async () => {
-    console.log('requestAccount function called');
-    console.log('window.ethereum:', window.ethereum);
 
     try {
       await window.ethereum.request({ method: 'eth_requestAccounts' });
