@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, lazy, Suspense, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
@@ -63,23 +63,22 @@ setIsAllowed(Number(balance.toString()) > 0);
   };
   
 
-  useEffect(() => {
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum);
-      requestAccount();
-    } else {
-    }
-  }, []);
-
-  const requestAccount = async () => {
-
+  const requestAccount = useCallback(async () => {
     try {
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       checkNFTOwnership();
     } catch (error) {
       console.error('User denied account access', error);
     }
-  };
+  }, []); // Add any dependencies of requestAccount here
+
+  useEffect(() => {
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      requestAccount();
+    }
+  }, [requestAccount]);
+
   return (
     <div className="front-page-container">
       <motion.header

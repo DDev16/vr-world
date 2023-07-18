@@ -51,38 +51,38 @@ const SeussWorld = () => {
     const [orbitEnabled, setOrbitEnabled] = useState(true);
     const testing = false;
 
-  return (
+    return (
+      <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
+        <Canvas style={{ width: '100%', height: '100%' }}>
+          <XR>
+          {testing ? <Stats /> : null}
+          {testing ? <axesHelper args={[2]} /> : null}
+          {testing ? <gridHelper args={[500, 500]} /> : null}
+            <ambientLight intensity={5} />
+            <pointLight position={[10, 10, 10]} />
     
-    <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      <Canvas concurrent style={{ width: '100%', height: '100%' }}>
-        <XR>
-        {testing ? <Stats /> : null}
-        {testing ? <axesHelper args={[2]} /> : null}
-        {testing ? <gridHelper args={[500, 500]} /> : null}
-          <ambientLight intensity={5} />
-          <pointLight position={[10, 10, 10]} />
-
-          <Box position={[-1.2, 2, 0]} scale={[2,5,2]}>
-            <meshStandardMaterial color={'orange'} />
-          </Box>
-
-          <Plane args={[500, 500]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
-            <meshStandardMaterial color={'green'} />
-          </Plane>
-
-         <SkyBox textureUrl={Sky} />  
-          <SkyBox1 textureUrl={Sky1} /> 
-          <Vortex />
-
-          {/* OrbitControls allows the user to look around using the mouse */}
-          <OrbitControls enablePan={false} enableZoom={true} enabled={orbitEnabled} />
-          <Player firstPerson={false} setOrbitEnabled={setOrbitEnabled} /> {/* Third-person player */}
-
-          <XRSetup />
-        </XR>
-      </Canvas>
-    </div>
-  );
+            <Box position={[-1.2, 2, 0]} scale={[2,5,2]}>
+              <meshStandardMaterial color={'orange'} />
+            </Box>
+    
+            <Plane args={[500, 500]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
+              <meshStandardMaterial color={'green'} />
+            </Plane>
+    
+           <SkyBox textureUrl={Sky} />  
+            <SkyBox1 textureUrl={Sky1} /> 
+            <Vortex />
+    
+            {/* OrbitControls allows the user to look around using the mouse */}
+            <OrbitControls enablePan={false} enableZoom={true} enabled={orbitEnabled} />
+            <Player firstPerson={false} setOrbitEnabled={setOrbitEnabled} /> {/* Third-person player */}
+    
+            <XRSetup />
+          </XR>
+        </Canvas>
+      </div>
+      
+    );
 }
 
 export default SeussWorld;
