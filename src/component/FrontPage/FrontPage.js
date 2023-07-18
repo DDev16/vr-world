@@ -1,4 +1,4 @@
-/* global BigInt */
+
 
 import React, { useState, useEffect, useMemo, lazy, Suspense, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -64,7 +64,7 @@ const FrontPage = () => {
   
       const balance = await nftContract.methods.balanceOf(userAddress).call();
 
-      setIsAllowed(BigInt(balance.toString()) > BigInt(0));
+      setIsAllowed(balance.toString() > '0');
 
     } catch (error) {
     }
