@@ -52,6 +52,7 @@ const SeussWorld = () => {
     const testing = false;
 
   return (
+    
     <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
       <Canvas concurrent style={{ width: '100%', height: '100%' }}>
         <XR>
@@ -61,15 +62,13 @@ const SeussWorld = () => {
           <ambientLight intensity={5} />
           <pointLight position={[10, 10, 10]} />
 
-          {/* This Box component could represent a simple building or object in the Seuss world
           <Box position={[-1.2, 2, 0]} scale={[2,5,2]}>
             <meshStandardMaterial color={'orange'} />
-          </Box> */}
+          </Box>
 
-          {/* This Plane represents the ground
           <Plane args={[500, 500]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
             <meshStandardMaterial color={'green'} />
-          </Plane> */}
+          </Plane>
 
          <SkyBox textureUrl={Sky} />  
           <SkyBox1 textureUrl={Sky1} /> 

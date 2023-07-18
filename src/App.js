@@ -1,12 +1,16 @@
-import React from 'react'
-import SeussWorld from './component/suessworld.js'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import FrontPage from './component/FrontPage/FrontPage.js';
+import SeussWorld from './component/suessworld.js';
 
 function App() {
   return (
-    <div className="App">
-      <SeussWorld />
-    </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/seussworld" element={<SeussWorld />} />
+        <Route path="/" element={<FrontPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
