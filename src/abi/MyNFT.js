@@ -737,5 +737,5 @@ export const MyNFT =  [
 		"stateMutability": "nonpayable",
 		"type": "function"
 	}
-]
-;
+];
+

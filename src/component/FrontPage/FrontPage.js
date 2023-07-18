@@ -5,10 +5,13 @@ import PropTypes from 'prop-types';
 import '../../component/FrontPage/FrontPage.css';
 import { getCurrentYear } from '../../component/utils/date.js';
 import '../../Assets/fonts.css';
+import Web3 from 'web3';
+import {MyNFT} from '../../abi/MyNFT.js';
 
 const Navigation = lazy(() => import('../../component/NAV/NavBar.js'));
 
 const transitionOptions = { delay: 0.2, type: 'spring', stiffness: 120 };
+const CONTRACT_ADDRESS = '0xEe2d1f6D5C8d71e8c97CAA4A80fF9eD87dbB9C34';
 
 const AnimatedText = ({ initial, animate, transition, text, style }) => (
   <motion.p initial={initial} animate={animate} transition={transition} style={style}>
@@ -19,6 +22,7 @@ const AnimatedText = ({ initial, animate, transition, text, style }) => (
 const FrontPage = () => {
   const year = useMemo(() => getCurrentYear(), []);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [ownsNFT, setOwnsNFT] = useState(false);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -30,6 +34,36 @@ const FrontPage = () => {
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
+  }, []);
+
+  useEffect(() => {
+    async function checkNFTOwnership() {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        try {
+          await window.ethereum.enable();
+          const accounts = await web3.eth.getAccounts();
+          const currentAccount = accounts[0];
+
+          const nftContract = new web3.eth.Contract(
+            MyNFT,
+            CONTRACT_ADDRESS
+          );
+
+          const balance = await nftContract.methods
+            .balanceOf(currentAccount)
+            .call();
+
+          if (balance > 0) {
+            setOwnsNFT(true);
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+
+    checkNFTOwnership();
   }, []);
 
   const fontSize = useMemo(() => {
@@ -123,27 +157,23 @@ const FrontPage = () => {
           }}
           text="Experience an immersive 3D world inspired by the whimsical charm of Dr. Seuss and the power of blockchain Punks. Navigate through our fantastic landscapes, find Easter eggs hidden around,  interact with our unique assets, and step into a world beyond the ordinary."
         />
+{!ownsNFT && (
+  <p style={{ color: 'red', textAlign: 'center', marginTop: '20px' }}>
+    You do not own an NFT! Please purchase one to enter SeussWorld.
+  </p>
+)}
 
-        <Link to="/seussworld">
+        <Link to={ownsNFT ? "/seussworld" : "/"}>
           <motion.button
+            disabled={!ownsNFT}
             className="enter-button"
             whileHover={{ scale: 1.1, rotate: [0, 360] }}
             whileTap={{ scale: 0.9 }}
             aria-label="Enter SeussWorld"
-            style={{
-              background: 'linear-gradient(45deg, #FF00E5, #FFA600)',
-              color: '#FFF',
-              fontWeight: 'bold',
-              border: 'none',
-              borderRadius: '5px',
-              padding: '15px 30px',
-              fontSize: '24px',
-              cursor: 'pointer',
-              boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.25)',
-              textShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)',
-            }}
+            title="You need an NFT to enter the world"
+            style={{ fontFamily: 'SeussFont', fontSize: '20px' }}
           >
-            Enter PunkWorld
+            Enter SeussWorld
           </motion.button>
         </Link>
       </motion.main>
@@ -152,18 +182,19 @@ const FrontPage = () => {
         className="footer"
         initial={{ y: 250, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={transitionOptions}
-        style={{
+        transition={{ duration: 1.5 }}style={{
           fontFamily: 'SeussFont',
           color: '#F39C12',
-          textShadow: '2px 2px 4px rgba(1, 0, 0, 0.5)',
+          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
           padding: '10px',
+          fontSize: '24px',
           borderRadius: '5px',
-          fontSize: '20px',
           fontWeight: 'bold',
         }}
       >
-        <p>&copy; {year} All rights reserved by PunkWorld</p>
+        <h4 aria-label="Footer Note">
+          © {year} PunkWorld - All rights reserved
+        </h4>
       </motion.footer>
     </div>
   );
@@ -173,9 +204,11 @@ AnimatedText.propTypes = {
   initial: PropTypes.object,
   animate: PropTypes.object,
   transition: PropTypes.object,
-  text: PropTypes.string,
+  text: PropTypes.string.isRequired,
   style: PropTypes.object,
 };
+
+
 
 AnimatedText.defaultProps = {
   initial: { y: -250, opacity: 0 },
