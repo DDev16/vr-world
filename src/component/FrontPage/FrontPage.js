@@ -41,22 +41,29 @@ const FrontPage = () => {
 
   const checkNFTOwnership = async () => {
     console.log('checkNFTOwnership function called');
-
+  
     try {
       const web3 = new Web3(window.ethereum);
       const contractAddress = '0xEe2d1f6D5C8d71e8c97CAA4A80fF9eD87dbB9C34';
       const nftContract = new web3.eth.Contract(MyNFT, contractAddress);
       const accounts = await web3.eth.getAccounts();
+  
+      if (!accounts[0]) {
+        console.error("No account connected");
+        return;
+      }
+  
       const userAddress = accounts[0];
-
+  
       const balance = await nftContract.methods.balanceOf(userAddress).call();
-      console.log('balance:', balance);
-
-      setIsAllowed(balance > 0);
+      console.log('balance:', balance.toString());
+  
+      setIsAllowed(balance.toString() > '0');
     } catch (error) {
       console.error('Error checking NFT ownership:', error);
     }
   };
+  
 
   useEffect(() => {
     if (window.ethereum) {
