@@ -1,11 +1,7 @@
-
-
-import React, { useState, useEffect, useMemo, lazy, Suspense, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import Web3 from 'web3'; 
-import { MyNFT } from '../../abi/MyNFT.js'; 
 import '../../component/FrontPage/FrontPage.css';
 import { getCurrentYear } from '../../component/utils/date.js';
 import '../../Assets/fonts.css';
@@ -15,15 +11,14 @@ const Navigation = lazy(() => import('../../component/NAV/NavBar.js'));
 const transitionOptions = { delay: 0.2, type: 'spring', stiffness: 120 };
 
 const AnimatedText = ({ initial, animate, transition, text, style }) => (
-    <motion.p initial={initial} animate={animate} transition={transition} style={style}>
-      {text}
-    </motion.p>
-  );
+  <motion.p initial={initial} animate={animate} transition={transition} style={style}>
+    {text}
+  </motion.p>
+);
 
 const FrontPage = () => {
   const year = useMemo(() => getCurrentYear(), []);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [isAllowed, setIsAllowed] = useState(false); 
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -46,46 +41,6 @@ const FrontPage = () => {
       return '100px';
     }
   }, [windowWidth]);
-
-  const checkNFTOwnership = async () => {
-  
-    try {
-      const web3 = new Web3(window.ethereum);
-      const contractAddress = '0xEe2d1f6D5C8d71e8c97CAA4A80fF9eD87dbB9C34';
-      const nftContract = new web3.eth.Contract(MyNFT, contractAddress);
-      const accounts = await web3.eth.getAccounts();
-  
-      if (!accounts[0]) {
-        console.error("No account connected");
-        return;
-      }
-  
-      const userAddress = accounts[0];
-  
-      const balance = await nftContract.methods.balanceOf(userAddress).call();
-
-      setIsAllowed(balance.toString() > '0');
-
-    } catch (error) {
-    }
-  };
-  
-
-  const requestAccount = useCallback(async () => {
-    try {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      checkNFTOwnership();
-    } catch (error) {
-      console.error('User denied account access', error);
-    }
-  }, []); // Add any dependencies of requestAccount here
-
-  useEffect(() => {
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum);
-      requestAccount();
-    }
-  }, [requestAccount]);
 
   return (
     <div className="front-page-container">
@@ -169,101 +124,50 @@ const FrontPage = () => {
           text="Experience an immersive 3D world inspired by the whimsical charm of Dr. Seuss and the power of blockchain Punks. Navigate through our fantastic landscapes, find Easter eggs hidden around,  interact with our unique assets, and step into a world beyond the ordinary."
         />
 
-{!window.ethereum ? (
-      <p style={{ 
-        fontFamily: 'SeussFont', 
-        color: '#F39C12',
-        fontSize: '20px', 
-        textAlign: 'center', 
-        marginTop: '50px' 
-      }}>
-        Please install MetaMask
-      </p>
-    ) : isAllowed ? (
-      <Link to="/seussworld">
-            <motion.button
-              className="enter-button"
-              whileHover={{ scale: 1.1, rotate: [0, 360] }}
-              whileTap={{ scale: 0.9 }}
-              aria-label="Enter SeussWorld"
-              style={{
-                background: 'linear-gradient(45deg, #FF00E5, #FFA600)',
-                color: '#FFF',
-                fontWeight: 'bold',
-                border: 'none',
-                borderRadius: '5px',
-                padding: '15px 30px',
-                fontSize: '24px',
-                cursor: 'pointer',
-                boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.25)',
-                textShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)',
-              }}
-            >
-              Enter PunkWorld
-            </motion.button>
-            </Link>
-    ) : (
-      <>
-        <p  style={{
-            fontFamily: 'SeussFont',
-            color: '#F39C12',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-            background: 'rgba(255, 255, 255, 0.3)',
-            padding: '10px',
-            borderRadius: '5px',
-            fontSize: '40px',
-            fontWeight: 'bold',
-          }}>
-          You need to own our NFTs to enter PunkWorld.
-        </p>
-        <button 
-          onClick={requestAccount}
-          style={{
-            background: 'linear-gradient(45deg, #FF00E5, #FFA600)',
-            color: '#FFF',
-            fontWeight: 'bold',
-            border: 'none',
-            borderRadius: '5px',
-            padding: '15px 30px',
-            fontSize: '24px',
-            cursor: 'pointer',
-            boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.25)',
-            textShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)',
-            display: 'block',
-            margin: '20px auto',
-          }}
-        >
-          Connect Wallet
-        </button>
-      </>
-    )}
+        <Link to="/seussworld">
+          <motion.button
+            className="enter-button"
+            whileHover={{ scale: 1.1, rotate: [0, 360] }}
+            whileTap={{ scale: 0.9 }}
+            aria-label="Enter SeussWorld"
+            style={{
+              background: 'linear-gradient(45deg, #FF00E5, #FFA600)',
+              color: '#FFF',
+              fontWeight: 'bold',
+              border: 'none',
+              borderRadius: '5px',
+              padding: '15px 30px',
+              fontSize: '24px',
+              cursor: 'pointer',
+              boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.25)',
+              textShadow: '0px 2px 4px rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            Enter PunkWorld
+          </motion.button>
+        </Link>
       </motion.main>
-      <footer
+
+      <motion.footer
+        className="footer"
+        initial={{ y: 250, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={transitionOptions}
         style={{
-          background: '#F5F5F5',
-          padding: '20px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: '50px',
+          fontFamily: 'SeussFont',
+          color: '#F39C12',
+          textShadow: '2px 2px 4px rgba(1, 0, 0, 0.5)',
+          padding: '10px',
+          borderRadius: '5px',
+          fontSize: '20px',
+          fontWeight: 'bold',
         }}
       >
-        <p
-          style={{
-            fontFamily: 'SeussFont',
-            color: '#000',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.25)',
-            fontSize: '24px',
-          }}
-        >
-          &copy; {year} PunkWorld. All rights reserved.
-        </p>
-      </footer>
+        <p>&copy; {year} All rights reserved by PunkWorld</p>
+      </motion.footer>
     </div>
   );
 };
-
-
 
 AnimatedText.propTypes = {
   initial: PropTypes.object,
@@ -281,7 +185,7 @@ AnimatedText.defaultProps = {
 };
 
 FrontPage.propTypes = {
-    history: PropTypes.object,
-  };
-  
-  export default FrontPage;
+  history: PropTypes.object,
+};
+
+export default FrontPage;
