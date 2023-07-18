@@ -1,4 +1,4 @@
-
+/* global BigInt */
 
 import React, { useState, useEffect, useMemo, lazy, Suspense, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -13,6 +13,12 @@ import '../../Assets/fonts.css';
 const Navigation = lazy(() => import('../../component/NAV/NavBar.js'));
 
 const transitionOptions = { delay: 0.2, type: 'spring', stiffness: 120 };
+
+const AnimatedText = ({ initial, animate, transition, text, style }) => (
+    <motion.p initial={initial} animate={animate} transition={transition} style={style}>
+      {text}
+    </motion.p>
+  );
 
 const FrontPage = () => {
   const year = useMemo(() => getCurrentYear(), []);
@@ -58,7 +64,7 @@ const FrontPage = () => {
   
       const balance = await nftContract.methods.balanceOf(userAddress).call();
 
-setIsAllowed(Number(balance.toString()) > 0);
+      setIsAllowed(BigInt(balance.toString()) > BigInt(0));
 
     } catch (error) {
     }
@@ -258,13 +264,6 @@ setIsAllowed(Number(balance.toString()) > 0);
 };
 
 
-
-
-const AnimatedText = ({ initial, animate, transition, text, style }) => (
-  <motion.p initial={initial} animate={animate} transition={transition} style={style}>
-    {text}
-  </motion.p>
-);
 
 AnimatedText.propTypes = {
   initial: PropTypes.object,
